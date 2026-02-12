@@ -72,6 +72,7 @@ impl Routine for UnitRoutine {
             dtypes,
             cube_dim,
             cube_count_plan,
+            address_type: problem.address_type,
         })
     }
 }
