@@ -83,13 +83,13 @@ pub fn launch_ref<R: Runtime>(
     let out_shape = out.shape;
 
     let lhs_line_size = tensor_line_size_parallel(
-        client.io_optimized_line_sizes(&dtypes.lhs_global),
+        client.io_optimized_line_sizes(dtypes.lhs_global.size()),
         lhs.data().shape,
         lhs.data().strides,
         rank - 1,
     );
     let rhs_line_size = tensor_line_size_parallel(
-        client.io_optimized_line_sizes(&dtypes.rhs_global),
+        client.io_optimized_line_sizes(dtypes.rhs_global.size()),
         rhs.data().shape,
         rhs.data().strides,
         rank - 2,
@@ -106,12 +106,12 @@ pub fn launch_ref<R: Runtime>(
         .max(out.required_address_type());
 
     let problem = MatmulProblem::from_shapes_and_strides(
-        lhs_shape.to_vec(),
-        rhs_shape.to_vec(),
-        out_shape.to_vec(),
-        lhs.data().strides.to_vec(),
-        rhs.data().strides.to_vec(),
-        out.strides.to_vec(),
+        lhs_shape.into(),
+        rhs_shape.into(),
+        out_shape.into(),
+        lhs.data().strides.into(),
+        rhs.data().strides.into(),
+        out.strides.into(),
         dtypes.as_global_elems(),
         address_type,
         lhs.scheme(),
